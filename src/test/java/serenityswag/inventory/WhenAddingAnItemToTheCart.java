@@ -6,6 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import serenityswag.authentication.LoginActions;
 import serenityswag.authentication.User;
+import serenityswag.cart.CartActions;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -17,6 +22,12 @@ public class WhenAddingAnItemToTheCart {
 
     @Steps
     AddToCartActions addToCart;
+
+    @Steps
+    ViewCartActions openCart;
+
+    @Steps
+    CartActions fromCart;
 
     InventoryPage inventoryPage;
 
@@ -46,6 +57,31 @@ public class WhenAddingAnItemToTheCart {
 
     @Test
     public void allTheItemsShouldAppearInTheCart() {
+        ArrayList<InventoryItem> items = new ArrayList<InventoryItem>();
 
+        login.as(User.STANDARD_USER);
+
+        // open the shopping cart
+        openCart.fromIcon();
+        // validate the cart is empty
+        assertThat(fromCart.checkIsEmpty()).isEqualTo(true);
+
+        fromCart.continueShopping();
+        addToCart.item(InventoryItem.BACKPACK);
+        items.add(InventoryItem.BACKPACK);
+
+        // open the shopping cart
+        openCart.fromIcon();
+        // validate the correct item has been added
+        assertThat(fromCart.checkItemsInCart(items)).isEqualTo(true);
+
+        fromCart.continueShopping();
+        addToCart.item(InventoryItem.ONESIE);
+        items.add(InventoryItem.ONESIE);
+
+        // open the shopping cart
+        openCart.fromIcon();
+        // validate the correct item has been added
+        assertThat(fromCart.checkItemsInCart(items)).isEqualTo(true);
     }
 }
