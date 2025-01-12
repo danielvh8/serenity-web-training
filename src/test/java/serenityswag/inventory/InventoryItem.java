@@ -24,4 +24,9 @@ public enum InventoryItem {
     public String getDataId() {
         return dataId;
     }
+
+    @Override
+    public String toString() {
+        return this.getName();
+    }
 }

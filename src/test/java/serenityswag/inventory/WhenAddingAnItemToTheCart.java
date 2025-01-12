@@ -1,7 +1,11 @@
 package serenityswag.inventory;
 
 import net.serenitybdd.annotations.Steps;
+import net.serenitybdd.core.Serenity;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
+import org.junit.Before;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import serenityswag.authentication.LoginActions;
@@ -13,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static serenityswag.authentication.User.*;
 
 @ExtendWith(SerenityJUnit5Extension.class)
 public class WhenAddingAnItemToTheCart {
@@ -31,35 +36,43 @@ public class WhenAddingAnItemToTheCart {
 
     InventoryPage inventoryPage;
 
+    @BeforeEach
+    public void login() {
+        login.as(STANDARD_USER);
+    }
+
     @Test
     public void theCorrectItemCountShouldBeShown() {
-        login.as(User.STANDARD_USER);
-
         addToCart.item(InventoryItem.BACKPACK);
-        assertThat(inventoryPage.getCartBadgeCount()).isEqualTo(1);
+        verifyBadgeCountIs(1);
 
         addToCart.item(InventoryItem.BIKE_LIGHT);
-        assertThat(inventoryPage.getCartBadgeCount()).isEqualTo(2);
+        verifyBadgeCountIs(2);
 
         addToCart.item(InventoryItem.BOLT_T_SHIRT);
-        assertThat(inventoryPage.getCartBadgeCount()).isEqualTo(3);
+        verifyBadgeCountIs(3);
 
         addToCart.item(InventoryItem.FLEECE_JACKET);
-        assertThat(inventoryPage.getCartBadgeCount()).isEqualTo(4);
+        verifyBadgeCountIs(4);
 
         addToCart.item(InventoryItem.ONESIE);
-        assertThat(inventoryPage.getCartBadgeCount()).isEqualTo(5);
+        verifyBadgeCountIs(5);
 
         addToCart.item(InventoryItem.T_SHIRT_RED);
-        assertThat(inventoryPage.getCartBadgeCount()).isEqualTo(6);
+        verifyBadgeCountIs(6);
+
+    }
+
+    public void verifyBadgeCountIs (Integer expected) {
+        Serenity.reportThat(
+                String.format("The cart badge count should be %s.", expected),
+                () -> assertThat(inventoryPage.getCartBadgeCount()).isEqualTo(expected));
 
     }
 
     @Test
     public void allTheItemsShouldAppearInTheCart() {
         ArrayList<InventoryItem> items = new ArrayList<InventoryItem>();
-
-        login.as(User.STANDARD_USER);
 
         // open the shopping cart
         openCart.fromIcon();
