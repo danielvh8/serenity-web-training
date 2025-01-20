@@ -19,7 +19,27 @@ public class TodoListActions extends UIInteractionSteps {
     }
 
     @Step("'{0}' should be on the todo-list.")
-    public void hasItem(String item1) {
-        $("//app-todo-list//label[text()='" + item1 + "']").shouldBePresent();
+    public void hasItem(String item) {
+        $("//app-todo-list//label[text()='" + item + "']").shouldBePresent();
+    }
+
+    @Step("'{0}' should not be on the todo-list.")
+    public void doesNotHaveItem(String item) {
+        $("//app-todo-list//label[text()='" + item + "']").shouldNotBePresent();
+    }
+
+    @Step("Mark '{0}' as completed.")
+    public void completeItem(String itemName) {
+        $("//label[text()='" + itemName +"']/parent::div/input").click();
+    }
+
+    @Step("Filter on only active items.")
+    public void showActive() {
+        $("//a[text()='Active']").click();
+    }
+
+    @Step("Filter on only active items.")
+    public void showCompleted() {
+        $("//a[text()='Completed']").click();
     }
 }
