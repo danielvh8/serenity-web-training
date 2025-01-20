@@ -14,32 +14,42 @@ public class TodoListActions extends UIInteractionSteps {
     }
 
     @Step("Add '{0}' to the todo-list.")
-    public void addItem(String itemName) {
-        $("//input[@placeholder='What needs to be done?']").typeAndEnter(itemName);
+    public void addItem(TodoListItem item) {
+        $("//input[@placeholder='What needs to be done?']").typeAndEnter(item.getTaskDescription());
     }
 
     @Step("'{0}' should be on the todo-list.")
-    public void hasItem(String item) {
-        $("//app-todo-list//label[text()='" + item + "']").shouldBePresent();
+    public void hasItem(TodoListItem item) {
+        $("//app-todo-list//label[text()='" + item.getTaskDescription() + "']").shouldBePresent();
     }
 
     @Step("'{0}' should not be on the todo-list.")
-    public void doesNotHaveItem(String item) {
-        $("//app-todo-list//label[text()='" + item + "']").shouldNotBePresent();
+    public void doesNotHaveItem(TodoListItem item) {
+        $("//app-todo-list//label[text()='" + item.getTaskDescription() + "']").shouldNotBePresent();
     }
 
     @Step("Mark '{0}' as completed.")
-    public void completeItem(String itemName) {
-        $("//label[text()='" + itemName +"']/parent::div/input").click();
+    public void completeItem(TodoListItem item) {
+        $("//label[text()='" + item.getTaskDescription() +"']/parent::div/input").click();
     }
 
     @Step("Filter on only active items.")
     public void showActive() {
-        $("//a[text()='Active']").click();
+        showItemsThatAre("Active");
     }
 
     @Step("Filter on only active items.")
     public void showCompleted() {
-        $("//a[text()='Completed']").click();
+        showItemsThatAre("Completed");
+    }
+
+    private void showItemsThatAre(String status) {
+        $("//a[text()='" + status +"']").click();
+    }
+
+    @Step("Remove the item '{0}'")
+    public void deleteItem(TodoListItem item) {
+        $("//label[text()='" + item.getTaskDescription() +"']/parent::div/label").click();
+        $("//label[text()='" + item.getTaskDescription() +"']/parent::div/button").click();
     }
 }

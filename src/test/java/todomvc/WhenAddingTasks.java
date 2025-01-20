@@ -10,6 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static todomvc.TodoListItem.FEED_THE_CAT;
+import static todomvc.TodoListItem.WALK_THE_DOG;
 
 @ExtendWith(SerenityJUnit5Extension.class)
 public class WhenAddingTasks {
@@ -31,7 +33,7 @@ public class WhenAddingTasks {
         // Check that list is empty
         todoListShouldHaveSizeOf(0);
         // Add "Feed The Cat" to the list
-        todoList.addItem("Feed The Cat");
+        todoList.addItem(FEED_THE_CAT);
         // Check that "Feed The Cat" appears in the list
         todoListShouldHaveSizeOf(1);
     }
@@ -44,15 +46,13 @@ public class WhenAddingTasks {
     // TODO: Exercise 2
     @Test
     public void addingMultipleTasks() {
-        String item1 = "Feed The Cat";
-        String item2 = "Walk the dog";
         // Add "Feed The Cat" and "Walk the dog" to the list
-        todoList.addItem(item1);
-        todoList.addItem(item2);
+        todoList.addItem(FEED_THE_CAT);
+        todoList.addItem(WALK_THE_DOG);
         // Check that they all appear in the list
         todoListShouldHaveSizeOf(2);
-        todoList.hasItem(item1);
-        todoList.hasItem(item2);
+        todoList.hasItem(FEED_THE_CAT);
+        todoList.hasItem(WALK_THE_DOG);
     }
 
 }
